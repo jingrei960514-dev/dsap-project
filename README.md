@@ -92,7 +92,6 @@
 - **可擴充架構**：所有動作繼承共用的 `BaseExercise` 抽象類別，新增動作只需建立一個新檔案
 
 本專案亦針對語音佇列管理進行資料結構效能分析，比較 dict 線性掃描、heapq、分桶 deque 三種實作在不同事件規模下的時間複雜度與實測耗時，並以 `benchmark_voice_queue.py` 產出量化數據與圖表。
-![alt text](image.png)
 
 ### 使用方式
 <!-- 如何編譯、執行、使用你的程式 -->
@@ -156,6 +155,8 @@ python benchmark_voice_queue.py
 ```
 
 執行完畢後終端會輸出各資料結構的耗時比較表，並在同目錄產生 `benchmark_chart.png` 圖表。
+<img width="2379" height="1787" alt="benchmark_chart" src="https://github.com/user-attachments/assets/85da2423-41a4-41f9-b9f3-13c94bb28ab7" />
+
 
 
 
