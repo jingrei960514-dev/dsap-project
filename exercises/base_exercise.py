@@ -5,9 +5,9 @@ exercises/base_exercise.py
 新增動作只需繼承 BaseExercise，實作三個抽象方法即可。
 """
 
-from __future__ import annotations
-from abc        import ABC, abstractmethod
-from dataclasses import dataclass, field
+from __future__ import annotations # Python 3.11+ for self-referential type hints
+from abc        import ABC, abstractmethod # 抽象基類與方法
+from dataclasses import dataclass, field # 簡化資料結構定義
 
 
 # ──────────────────────────────────────────────

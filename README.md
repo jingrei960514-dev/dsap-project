@@ -77,10 +77,85 @@
 
 ### 專案說明
 <!-- 完整描述你的專案做了什麼 -->
+本專案為即時虛擬健身教練系統，透過電腦視覺與姿勢偵測技術，在不需要專業教練的情況下提供即時的動作計數與姿勢回饋。
+
+系統使用 MediaPipe 偵測人體 33 個骨架關節點，計算關鍵關節角度來判斷動作完成與否，目前支援三種動作：
+
+- **伏地挺身**：偵測肩-肘-腕角度，並檢查身體是否保持水平對齊
+- **引體向上**：偵測下巴是否過槓，並即時監測高低肩對稱性
+- **深蹲**：偵測髖-膝-踝角度，並警告膝蓋內扣與背部過度前傾
+
+除動作偵測外，系統包含以下功能：
+
+- **語音即時回饋**：姿勢錯誤時自動播報中文語音提示，使用 heapq 優先級佇列搭配冷卻計時器管理播報排程，非阻塞設計不影響主迴圈效能
+- **手機鏡頭支援**：啟動時可選擇電腦內建攝影機或透過 IP 串流使用手機鏡頭
+- **可擴充架構**：所有動作繼承共用的 `BaseExercise` 抽象類別，新增動作只需建立一個新檔案
+
+本專案亦針對語音佇列管理進行資料結構效能分析，比較 dict 線性掃描、heapq、分桶 deque 三種實作在不同事件規模下的時間複雜度與實測耗時，並以 `benchmark_voice_queue.py` 產出量化數據與圖表。
+![alt text](image.png)
 
 ### 使用方式
 <!-- 如何編譯、執行、使用你的程式 -->
+**環境建置**
 
-### 與課程的關聯總結
-<!-- 總結你的專題與進階程式設計及資料結構課程之間的關聯 -->
+**Python 版本需求**
+
+請使用 Python **3.9 – 3.11**，建議 **3.10**。
+
+MediaPipe 目前對 Python 3.12 以上支援不穩定，安裝時可能出現
+`ERROR: Could not find a version that satisfies the requirement mediapipe` 的錯誤。
+
+確認目前版本：
+```bash
+python --version
+```
+
+如果版本不符，建議使用 [pyenv](https://github.com/pyenv/pyenv)（macOS/Linux）
+或 [py launcher](https://www.python.org/downloads/)（Windows）管理多版本。
+
+Windows 安裝指定版本範例：
+```bash
+# 下載 Python 3.10 安裝包後，建立虛擬環境時指定版本
+py -3.10 -m venv venv
+
+# Windows
+venv\Scripts\activate
+# macOS / Linux
+source venv/bin/activate
+
+# 安裝套件
+pip install opencv-python mediapipe numpy
+
+# 語音套件（擇一）
+pip install gtts pygame    # 推薦，中文音質較好
+pip install pyttsx3        # 離線備用
+```
+
+**執行主程式**
+
+```bash
+python virtual_coach.py
+```
+
+啟動後依終端提示選擇攝影機來源（電腦或手機 IP），接著對著鏡頭做動作即可自動偵測計數。
+
+**快捷鍵**
+
+| 按鍵 | 功能 |
+|------|------|
+| `Tab` | 切換動作（伏地挺身 → 引體向上 → 深蹲） |
+| `R` | 重置當前計數 |
+| `M` | 語音靜音 / 取消靜音 |
+| `Q` | 離開程式 |
+
+**執行效能分析**
+
+```bash
+pip install matplotlib
+python benchmark_voice_queue.py
+```
+
+執行完畢後終端會輸出各資料結構的耗時比較表，並在同目錄產生 `benchmark_chart.png` 圖表。
+
+
 
